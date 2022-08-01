@@ -1,0 +1,9 @@
+{
+  "extends": ["eslint-config-fyapy-vue"],
+  "globals": {
+    "NodeJS": true
+  },
+  "rules": {
+    "vue/prop-name-casing": "off" // optional
+  }
+}
