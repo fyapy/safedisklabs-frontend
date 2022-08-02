@@ -2,10 +2,74 @@ $primary: #1FF5BA;
 $primaryOpacity80: rgba(31, 245, 186, .8);
 
 $textDanger: #FE4C4F;
+$redDarken: #862F39;
+$redDarkenOpacity25: rgba(254, 76, 79, .25);
+$gray: #79797b;
+$grayOpacity50: rgba(121, 121, 123, .5);
 
 $backgroundBody: #1C1B22;
 $backgroundGrayDark: #26262E;
 $backgroundGrayDark2: #1C1C1C;
+$backgroundGrayDark3: #25262F;
 
 $white: #FFF;
 $whiteOpacity80: rgba(255, 255, 255, .8);
+$blackOpacity25: rgba(0, 0, 0, .25);
+
+
+
+$screenMobile: 767px;
+$screenTablet: 1024px;
+$screenComputer: 1440px;
+$screenDesktop: 1920px;
+
+@mixin makeMedia($from, $to: null) {
+  $query: 'screen';
+
+  @if ($from != null) {
+    $query: $query + ' and (min-width: #{$from})'
+  }
+  @if ($to != null) {
+    $query: $query + ' and (max-width: #{$to - 1})'
+  }
+
+  @media #{$query} { @content; }
+}
+
+
+@mixin mobile {
+  @media screen and (max-width: #{$screenMobile - 1}) { @content; }
+}
+@mixin tablet {
+  @media screen and (max-width: #{$screenTablet - 1}) { @content; }
+}
+@mixin computer {
+  @media screen and (max-width: #{$screenComputer - 1}) { @content; }
+}
+@mixin desktop {
+  @media screen and (max-width: #{$screenDesktop - 1}) { @content; }
+}
+@mixin tabletOnly {
+  @media screen and (min-width: $screenMobile) and (max-width: #{$screenTablet - 1}) { @content; }
+}
+@mixin computerOnly {
+  @media screen and (min-width: $screenTablet) and (max-width: #{$screenComputer - 1}) { @content; }
+}
+@mixin desktopOnly {
+  @media screen and (min-width: $screenComputer) and (max-width: #{$screenDesktop - 1}) { @content; }
+}
+@mixin aboveMobile {
+  @media screen and (min-width: $screenMobile) { @content; }
+}
+@mixin aboveTablet {
+  @media screen and (min-width: $screenTablet) { @content; }
+}
+@mixin aboveComputer {
+  @media screen and (min-width: $screenComputer) { @content; }
+}
+@mixin aboveDesktop {
+  @media screen and (min-width: $screenDesktop) { @content; }
+}
+@mixin largescreen {
+  @media screen and (min-width: $screenDesktop) { @content; }
+}

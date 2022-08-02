@@ -5,7 +5,7 @@ import {
   defineComponent,
   computed,
 } from 'vue'
-import { BooleanOptional, NumberOptional } from '../../utils/constants'
+import { BooleanOptional, NumberOptional } from 'utils/constants'
 
 export default defineComponent({
   props: {

@@ -3,7 +3,7 @@ export const noCyrillic = (text: string) => {
   return !text || regexCyrillic.test(String(text))
 }
 
-export const email = (email: string) => {
+export const isNotEmail = (email: string) => {
   if (!email || noCyrillic(email)) {
     return true
   }

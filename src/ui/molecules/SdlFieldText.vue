@@ -1,8 +1,8 @@
 <script lang="ts">
 import { useField } from 'formis'
 import { defineComponent } from 'vue'
-import { StringRequired } from '../../utils/constants'
-import { SdlInput, props } from '../atoms/SdlInput'
+import { SdlInput, props } from 'ui/atoms/SdlInput'
+import { StringRequired } from 'utils/constants'
 
 export default defineComponent({
   components: {

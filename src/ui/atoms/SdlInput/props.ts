@@ -1,5 +1,5 @@
 import type { InputHTMLAttributes, PropType } from 'vue'
-import { StringRequired } from '../../../utils/constants'
+import { StringRequired } from 'utils/constants'
 
 export const props = {
   placeholder: StringRequired,

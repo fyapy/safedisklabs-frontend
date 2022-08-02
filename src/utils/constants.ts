@@ -1,6 +1,6 @@
 export const StringOptional = {
   type: String,
-  default: undefined,
+  default: null,
 } as const
 export const StringRequired = {
   type: String,
@@ -12,9 +12,9 @@ export const NumberRequired = {
 } as const
 export const NumberOptional = {
   type: Number,
-  default: undefined,
+  default: null,
 } as const
 export const BooleanOptional = {
   type: Boolean,
-  default: undefined,
+  default: null,
 } as const
