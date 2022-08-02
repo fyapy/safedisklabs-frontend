@@ -16,7 +16,8 @@
     max-width: calc(380px + 30px);
 
     > svg:first-child {
-      transform: scale(.86);
+      width: 48px;
+      height: 48px;
     }
   }
 }

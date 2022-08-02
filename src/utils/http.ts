@@ -1,3 +1,5 @@
+import { getAccessToken } from './selectors'
+
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 interface HttpOptions extends Exclude<RequestInit, 'body' | 'method'> {
   proggress?(progress: number): void
@@ -152,10 +154,10 @@ export default createClient({
   getHeaders: () => {
     const headers: RequestInit['headers'] = {}
 
-    // const accessToken = getAccessToken()
-    // if (accessToken) {
-    //   headers.Authorization = `Bearer ${accessToken}`
-    // }
+    const accessToken = getAccessToken()
+    if (accessToken !== null) {
+      headers.Authorization = `Bearer ${accessToken}`
+    }
 
     return headers
   },

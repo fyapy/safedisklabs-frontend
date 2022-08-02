@@ -1,27 +1,38 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { NumberRequired, StringOptional } from 'utils/constants'
+import { StringOptional } from 'utils/constants'
 
 export default defineComponent({
   props: {
     class: StringOptional,
-    width: NumberRequired,
-    height: NumberRequired,
+    width: {
+      type: Number,
+      required: true,
+      default: 56,
+    },
+    height: {
+      type: Number,
+      required: true,
+      default: 56,
+    },
   },
 })
 </script>
 
 <template>
-  <svg
-    :class="$props.class"
-    :height="$props.height"
-    :width="$props.width"
-    fill="#1FF5BA"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <!-- eslint-disable-next-line max-len -->
-    <path d="M54.36 3.281H23.067l1.459 3.281H56v-1.64a1.64 1.64 0 0 0-1.64-1.64ZM46.654 33.866c-5.873-2.337-11.747-2.337-17.62 0A1.641 1.641 0 0 0 28 35.39v5.638c0 6.275 3.54 11.986 9.1 14.794.468.236 1.02.236 1.488 0 5.56-2.809 9.1-8.52 9.1-14.794V35.39c0-.672-.41-1.277-1.034-1.525Zm-4.17 9.118-4.64 4.64c-.641.642-1.68.642-2.32 0l-2.32-2.32a1.64 1.64 0 0 1 2.32-2.32l1.16 1.16 3.48-3.48a1.64 1.64 0 0 1 2.32 2.32Z" />
-    <!-- eslint-disable-next-line max-len -->
-    <path d="M18.452.974A1.64 1.64 0 0 0 16.953 0H1.641A1.64 1.64 0 0 0 0 1.64v37.188a4.922 4.922 0 0 0 4.922 4.922h19.984a19.883 19.883 0 0 1-.187-2.721V35.39a4.897 4.897 0 0 1 3.102-4.574c3.31-1.317 6.683-1.985 10.023-1.985s6.712.668 10.023 1.985a4.898 4.898 0 0 1 3.102 4.574v5.638c0 .914-.063 1.823-.188 2.721h.297A4.922 4.922 0 0 0 56 38.828V9.844H22.394L18.452.974Zm.798 36.214H8.312a1.64 1.64 0 0 1 0-3.282H19.25a1.64 1.64 0 0 1 0 3.282Zm0-6.563H8.312a1.64 1.64 0 0 1 0-3.281H19.25a1.64 1.64 0 1 1 0 3.281Z" />
-  </svg>
+  <router-link to="/" :class="$props.class">
+    <svg
+      :height="height"
+      :width="width"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="#1FF5BA"
+      fill-opacity=".8"
+      viewBox="0 0 56 56"
+    >
+      <!-- eslint-disable-next-line max-len -->
+      <path d="M54.4 3.3H23l1.4 3.3H56V4.9c0-.9-.7-1.6-1.6-1.6Zm-7.7 30.6a23 23 0 0 0-17.7 0c-.6.2-1 .8-1 1.5V41c0 6.3 3.5 12 9.1 14.8.5.3 1 .3 1.5 0 5.5-2.8 9-8.5 9-14.8v-5.6c0-.7-.3-1.3-1-1.5Zm-4.2 9-4.7 4.7c-.6.7-1.6.7-2.3 0l-2.3-2.3a1.6 1.6 0 0 1 2.3-2.3l1.2 1.1 3.5-3.4a1.6 1.6 0 0 1 2.3 2.3Z" />
+      <!-- eslint-disable-next-line max-len -->
+      <path d="M18.5 1c-.3-.6-.9-1-1.5-1H1.6C.7 0 0 .7 0 1.6v37.2a5 5 0 0 0 5 5h20l-.3-2.8v-5.6a5 5 0 0 1 3.1-4.6 27 27 0 0 1 20 0 5 5 0 0 1 3.2 4.6V41c0 1 0 1.9-.2 2.8h.3a5 5 0 0 0 4.9-5v-29H22.4l-4-8.8Zm.8 36.2h-11a1.6 1.6 0 0 1 0-3.3h11a1.6 1.6 0 0 1 0 3.3Zm0-6.6h-11a1.6 1.6 0 0 1 0-3.3h11a1.6 1.6 0 1 1 0 3.3Z" />
+    </svg>
+  </router-link>
 </template>

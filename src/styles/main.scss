@@ -78,6 +78,27 @@ a:focus {
   flex-flow: column;
 }
 
+.flex-1 {
+  flex: 1;
+}
+.flow-column {
+  display: flex;
+  flex-flow: column;
+}
+.align-center {
+  display: flex;
+  align-items: center;
+}
+.justify-center {
+  display: flex;
+  justify-content: center;
+}
+.justify-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+
 // #nprogress {
 //   .bar {
 //     height: 3px;

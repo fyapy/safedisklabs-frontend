@@ -64,7 +64,7 @@ export default defineComponent({
 
 <template>
   <form :class="style.wrapper" @submit="handleFormSubmit">
-    <sdl-logo :width="56" :height="56" />
+    <sdl-logo />
     <div :class="style.title">
       Sign up
     </div>
