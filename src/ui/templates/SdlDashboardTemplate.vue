@@ -19,5 +19,9 @@ import { SdlFilePreview } from 'ui/organisms'
   flex: 1;
   display: flex;
   flex-flow: column;
+
+  @include makeMedia(null, 1600px) {
+    padding: 0 80px;
+  }
 }
 </style>

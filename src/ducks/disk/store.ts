@@ -43,7 +43,10 @@ export const useDiskStore = defineStore('disk', {
         this.pending = false
       }
     },
-    async upload(files: FileList, folderId: string | null = null) {
+    async upload(files: FileList | null, folderId: string | null = null) {
+      if (files === null || files.length === 0) {
+        return
+      }
       this.pendingList.push('upload')
 
       const formData = toFormData({
@@ -53,9 +56,9 @@ export const useDiskStore = defineStore('disk', {
       })
 
       try {
-        const res = await http.post('/disks/upload', formData)
+        const { list } = await http.post('/disks/upload', formData)
 
-        console.log(res)
+        this.allList.push(...list)
       } catch (e) {
         await asyncErrorNotify(e)
       } finally {
@@ -79,6 +82,28 @@ export const useDiskStore = defineStore('disk', {
         await asyncErrorNotify(e)
       } finally {
         this.removePendingList('create-folder')
+      }
+    },
+    async toggleStarred(id: string, type: 'folder' | 'file') {
+      const body = {
+        id,
+        type,
+      }
+
+      try {
+        const { value } = await http.post('/disks/toggle-starred', body)
+
+        if (type === 'folder') {
+          this.foldersList = this.foldersList.map(folder => folder.id === id
+            ? ({ ...folder, starred: value })
+            : folder)
+        } else {
+          this.allList = this.allList.map(file => file.id === id
+            ? ({ ...file, starred: value })
+            : file)
+        }
+      } catch (e) {
+        await asyncErrorNotify(e)
       }
     },
   },

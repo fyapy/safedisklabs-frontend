@@ -33,5 +33,7 @@ export default defineComponent({
     :placeholder="placeholder"
     :theme="theme"
     :type="type"
+    :autocomplete="autocomplete"
+    :autofocus="autofocus"
   />
 </template>

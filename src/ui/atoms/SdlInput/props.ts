@@ -8,6 +8,8 @@ export const props = {
     type: String as PropType<'bordered'>,
     default: null,
   },
+  autocomplete: String as PropType<InputHTMLAttributes['autocomplete']>,
+  autofocus: String as PropType<InputHTMLAttributes['autofocus']>,
   type: String as PropType<InputHTMLAttributes['type']>,
   modelValue: [String, Number],
 }

@@ -1,5 +1,6 @@
 import type { Notification, TimeoutsType } from './types'
 import { acceptHMRUpdate, defineStore } from 'pinia'
+import { useAuthStore } from 'ducks/auth'
 import { createId } from 'utils/string'
 import i18n from 'i18n'
 
@@ -38,6 +39,10 @@ export const asyncErrorNotify = async (error: any) => {
 
   if (typeof error?.json === 'function') {
     const json = await error.json()
+
+    if (json.message === 'INVALID_TOKEN') {
+      useAuthStore().logout()
+    }
 
     return store.asyncAdd({
       type: 'error',

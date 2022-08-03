@@ -3,6 +3,7 @@ import type { PropType, SVGAttributes } from 'vue'
 export type IconName =
   | 'disk'
   | 'star'
+  | 'star-solid'
   | 'closed-eye'
   | 'bin'
   | 'cloud'
@@ -16,6 +17,7 @@ export type IconName =
   | 'upload-file'
   | 'upload-folder'
   | 'folder'
+  | 'double-arrow-right'
 
 export const props = {
   name: {

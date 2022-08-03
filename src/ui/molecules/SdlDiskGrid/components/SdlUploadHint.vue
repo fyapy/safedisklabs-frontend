@@ -28,16 +28,20 @@ function handleChange(e: Event) {
         height="100"
         :fill="color.gray2"
       />
-      <label>
+      <label class="justify-center">
         <SdlButton
           tag="div"
           size="sm"
           theme="dark"
-          :disabled="isLoading"
         >
           Upload file(s)
         </SdlButton>
-        <input type="file" multiple @change="handleChange">
+        <input
+          type="file"
+          multiple
+          @change="handleChange"
+          :disabled="isLoading"
+        >
       </label>
     </div>
   </div>
@@ -49,7 +53,7 @@ function handleChange(e: Event) {
 
   padding-top: 100%;
 
-  border: 2px dashed #47474E;
+  border: 2px dashed $grayLight2;
   border-radius: 16px;
 }
 .content {

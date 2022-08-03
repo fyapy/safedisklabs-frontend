@@ -21,6 +21,8 @@ export default defineComponent({
       :placeholder="placeholder"
       :class="$style.input"
       :type="type"
+      :autocomplete="autocomplete"
+      :autofocus="autofocus"
       @blur="$emit('blur')"
       :value="modelValue"
       @input="handleInput"

@@ -35,7 +35,12 @@ const handleFormSubmit = handleSubmit(async values => {
 
 <template>
   <form @submit="handleFormSubmit" :class="$style.wrapper">
-    <SdlFieldText name="name" placeholder="Folder name" theme="bordered" />
+    <SdlFieldText
+      name="name"
+      placeholder="Folder name"
+      theme="bordered"
+      autofocus="true"
+    />
     <SdlButton :disabled="isDisabled">
       Create folder
     </SdlButton>

@@ -1,11 +1,25 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useDiskStore } from 'ducks/disk'
 import { SdlIcon } from 'ui/atoms'
 import { color } from 'ui/theme'
 import { DropdownStatus } from '../types.js'
 
 const emits = defineEmits<{
   (e: 'status', status: DropdownStatus): void
+  (e: 'close'): void
 }>()
+
+const diskStore = useDiskStore()
+
+const isLoading = computed(() => diskStore.inPendingList('upload'))
+
+function handleChange(e: Event) {
+  const files = (e.target as HTMLInputElement).files
+
+  emits('close')
+  diskStore.upload(files)
+}
 </script>
 
 <template>
@@ -17,25 +31,43 @@ const emits = defineEmits<{
         height="21"
         :fill="color.textGray"
       />
-      Новая папка
+      Create folder
     </div>
     <div :class="$style.link">
-      <SdlIcon
-        name="upload-file"
-        width="21"
-        height="21"
-        :fill="color.textGray"
-      />
-      Загрузить файл
+      <label class="align-center">
+        <SdlIcon
+          name="upload-file"
+          width="21"
+          height="21"
+          :fill="color.textGray"
+        />
+        Upload file
+        <input
+          type="file"
+          multiple
+          @change="handleChange"
+          :disabled="isLoading"
+        >
+      </label>
     </div>
     <div :class="$style.link">
-      <SdlIcon
-        name="upload-folder"
-        width="21"
-        height="21"
-        :fill="color.textGray"
-      />
-      Загрузить папку
+      <label class="align-center">
+        <SdlIcon
+          name="upload-folder"
+          width="21"
+          height="21"
+          :fill="color.textGray"
+        />
+        Upload folder
+        <input
+          type="file"
+          multiple
+          directory
+          webkitdirectory
+          @change="handleChange"
+          :disabled="isLoading"
+        >
+      </label>
     </div>
   </div>
 </template>
@@ -59,8 +91,14 @@ const emits = defineEmits<{
     padding-bottom: 16px;
   }
 
-  > svg {
+  svg {
     margin-right: 16px;
+  }
+  input {
+    width: 1px;
+    height: 1px;
+
+    visibility: none;
   }
 }
 </style>

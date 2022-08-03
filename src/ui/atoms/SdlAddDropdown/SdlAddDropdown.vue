@@ -35,8 +35,15 @@ defineExpose({
     :class="[$style.wrapper, !style && $style.hidden]"
     :style="style"
   >
-    <List v-if="status === 'list'" @status="e => status = e" />
-    <CreateFolder v-else-if="status === 'create-folder'" @submit="submitCreateFolder" />
+    <List
+      v-if="status === 'list'"
+      @status="e => status = e"
+      @close="emits('close')"
+    />
+    <CreateFolder
+      v-else-if="status === 'create-folder'"
+      @submit="submitCreateFolder"
+    />
   </div>
 </template>
 
