@@ -1,0 +1,54 @@
+.wrapper {
+  flex: 1;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+}
+.line {
+  height: 1px;
+
+  background-color: rgba(107, 107, 111, 0.4);
+}
+.header {
+  position: relative;
+
+  padding-bottom: 28px;
+
+  display: flex;
+  align-items: center;
+
+  font-weight: 600;
+  font-size: 28px;
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    height: 1px;
+
+    background-color: rgba(107, 107, 111, 0.4);
+  }
+
+  > svg {
+    margin-right: 12px;
+  }
+}
+.content {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+
+  text-align: center;
+  color: $gray2;
+
+  &__title {
+    margin: 40px 0 16px;
+
+    font-size: 28px;
+    font-weight: 600;
+    color: $white;
+  }
+}

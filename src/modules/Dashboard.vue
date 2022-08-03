@@ -1,28 +1,16 @@
-<script lang="ts">
-import { defineComponent, onBeforeMount } from 'vue'
+<script setup lang="ts">
+import { onBeforeMount } from 'vue'
 import { useDiskStore } from 'ducks/disk'
 import SdlAppTemplate from 'ui/templates/SdlAppTemplate.vue'
+import SdlDashboardTemplate from 'ui/templates/SdlDashboardTemplate.vue'
 
-export default defineComponent({
-  components: {
-    SdlAppTemplate,
-  },
-  setup() {
-    const diskStore = useDiskStore()
+const diskStore = useDiskStore()
 
-    onBeforeMount(diskStore.fetchDiskFiles)
-  },
-})
+onBeforeMount(diskStore.fetchDiskFiles)
 </script>
 
 <template>
   <sdl-app-template>
-    <div :class="$style.wrapper">Dashboard</div>
+    <sdl-dashboard-template />
   </sdl-app-template>
 </template>
-
-<style module lang="scss">
-.wrapper {
-  padding: 0 120px;
-}
-</style>

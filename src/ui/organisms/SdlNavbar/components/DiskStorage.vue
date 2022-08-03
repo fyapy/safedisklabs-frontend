@@ -10,6 +10,10 @@ const diskStore = useDiskStore()
 const disk = computed(() => diskStore.data!)
 
 const style = computed(() => {
+  if (diskStore.isEmptyDisk) {
+    return undefined
+  }
+
   const _disk = disk.value
   const percent = _disk.maxSize / 100
 

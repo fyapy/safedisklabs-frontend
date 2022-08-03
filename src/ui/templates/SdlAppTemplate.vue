@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { SdlNavbar } from 'ui/organisms'
+import { SdlNavbar } from 'ui/organisms/SdlNavbar'
 
 export default defineComponent({
   components: {

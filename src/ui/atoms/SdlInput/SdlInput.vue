@@ -24,6 +24,7 @@ export default defineComponent({
       @blur="$emit('blur')"
       :value="modelValue"
       @input="handleInput"
+      :data-theme="theme"
     >
     <div v-if="error" :class="$style.error">
       {{ error }}
@@ -55,6 +56,9 @@ export default defineComponent({
   }
   &:focus {
     outline: none;
+  }
+  &[data-theme='bordered'] {
+    border: 1px solid rgba(107, 107, 111, .4);
   }
 }
 .error {

@@ -1,4 +1,5 @@
 export { default as SdlLogo } from './SdlLogo.vue'
-export { default as SdlInput } from './SdlInput/SdlInput.vue'
-export { default as SdlButton } from './SdlButton.vue'
+export { SdlAddDropdown } from './SdlAddDropdown'
+export { SdlButton } from './SdlButton'
+export { SdlInput } from './SdlInput'
 export { SdlIcon } from './SdlIcon'

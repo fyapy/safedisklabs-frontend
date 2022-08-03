@@ -4,7 +4,7 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import { router } from 'routes'
 import { asyncErrorNotify } from 'ducks/notifications'
 import http from 'utils/http'
-import { setAccessToken } from 'utils/selectors'
+import { removeAccessToken, setAccessToken } from 'utils/selectors'
 
 type State = {
   pending: boolean
@@ -40,6 +40,10 @@ export const useAuthStore = defineStore('auth', {
       } catch (e) {
         await asyncErrorNotify(e)
       }
+    },
+    async logout() {
+      removeAccessToken()
+      router.push('/')
     },
   },
 })

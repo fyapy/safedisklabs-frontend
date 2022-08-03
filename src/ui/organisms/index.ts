@@ -1,2 +1,2 @@
 export { default as SdlNotificationsRoot } from './SdlNotificationsRoot.vue'
-export { SdlNavbar } from './SdlNavbar'
+export { SdlFilePreview } from './SdlFilePreview'

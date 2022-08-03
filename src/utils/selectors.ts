@@ -47,3 +47,49 @@ export const bytesToMB = (bytes: number) => bytes / (1024 * 1024)
 export const bytesToGB = (bytes: number) => (bytesToMB(bytes) / 1024).toFixed(2)
 export const MBToBytes = (mg: number) => mg * 1024 * 1024
 export const GBToBytes = (gb: number) => gb * MBToBytes(1024)
+
+
+const buildFormData = <T extends object>(
+  formData: FormData,
+  data: T,
+  parentKey?: string,
+) => {
+  if (
+    data
+    && typeof data === 'object'
+    && !(data instanceof Date)
+    && !(data instanceof File)
+    && !(data instanceof FileList)
+  ) {
+    Object.keys(data).forEach(key => {
+      buildFormData(
+        formData,
+        // @ts-ignore
+        data[key],
+        parentKey
+          ? `${parentKey}[${key}]`
+          : key,
+      )
+    })
+  } else if (data instanceof FileList) {
+    Array.from(data).forEach(file => {
+      // @ts-ignore
+      formData.append(parentKey, file)
+    })
+  } else {
+    const value = data == null ? '' : data
+    // @ts-ignore
+    formData.append(parentKey, value)
+  }
+}
+
+export const toFormData = <T extends object>(data: T, log = false) => {
+  const formData = new FormData()
+  buildFormData(formData, data)
+
+  if (log) {
+    new Response(formData).text().then(console.log)
+  }
+
+  return formData
+}

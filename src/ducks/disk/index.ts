@@ -1,2 +1,2 @@
 export { useDiskStore } from './store'
-export type { Disk } from './types'
+export type { Disk, File, Folder } from './types'

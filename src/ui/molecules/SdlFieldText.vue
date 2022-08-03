@@ -30,7 +30,8 @@ export default defineComponent({
     v-model="value"
     @blur="handleBlur"
     :error="touched ? error : undefined"
-    :placeholder="$props.placeholder"
-    :type="$props.type"
+    :placeholder="placeholder"
+    :theme="theme"
+    :type="type"
   />
 </template>

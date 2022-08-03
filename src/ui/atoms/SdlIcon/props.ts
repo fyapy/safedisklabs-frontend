@@ -8,6 +8,14 @@ export type IconName =
   | 'cloud'
   | 'gear'
   | 'profile'
+  | 'filter'
+  | 'search'
+  | 'box-plus'
+  | 'file'
+  | 'new-folder'
+  | 'upload-file'
+  | 'upload-folder'
+  | 'folder'
 
 export const props = {
   name: {

@@ -22,5 +22,9 @@ export const router = createRouter({
       component: Dashboard,
       beforeEnter: authGuard,
     },
+    {
+      path: '/:pathMatch(.*)*',
+      component: () => import('./modules/NotFound.vue'),
+    },
   ],
 })

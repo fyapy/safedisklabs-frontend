@@ -1,43 +1,33 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { useAuthStore } from 'ducks/auth'
 import { SdlLogo, SdlIcon } from 'ui/atoms'
 import { color } from 'ui/theme'
 import { DiskStorage } from './components'
 
-export default defineComponent({
-  components: {
-    SdlLogo,
-    SdlIcon,
-    DiskStorage,
+const authStore = useAuthStore()
+
+const links = [
+  {
+    text: 'My Disk',
+    to: '/dashboard',
+    icon: 'disk',
   },
-  setup() {
-    return {
-      color,
-      links: [
-        {
-          text: 'My Disk',
-          to: '/dashboard',
-          icon: 'disk',
-        },
-        {
-          text: 'Starred',
-          to: '/starred',
-          icon: 'star',
-        },
-        {
-          text: 'Hidden',
-          to: '/hidden',
-          icon: 'closed-eye',
-        },
-        {
-          text: 'Bin',
-          to: '/bin',
-          icon: 'bin',
-        },
-      ] as const,
-    }
+  {
+    text: 'Starred',
+    to: '/starred',
+    icon: 'star',
   },
-})
+  {
+    text: 'Hidden',
+    to: '/hidden',
+    icon: 'closed-eye',
+  },
+  {
+    text: 'Bin',
+    to: '/bin',
+    icon: 'bin',
+  },
+] as const
 </script>
 
 <template>
@@ -68,21 +58,24 @@ export default defineComponent({
           <disk-storage />
 
           <div :class="$style.bottom">
-            <div>
+            <!-- <div>
               <sdl-icon
                 name="gear"
                 width="20"
                 height="20"
                 :fill="color.textGray"
               />
-            </div>
-            <div>
+            </div> -->
+            <div :class="$style['bottom-link']">
               <sdl-icon
                 name="profile"
                 width="20"
                 height="20"
                 :fill="color.textGray"
               />
+              <ul :class="$style['bottom-drawer']">
+                <li @click="authStore.logout">Logout</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -107,7 +100,6 @@ export default defineComponent({
   flex-flow: column;
   align-items: center;
 
-  overflow-y: auto;
   background-color: $backgroundGrayDark3;
 }
 .logo {
@@ -172,20 +164,54 @@ export default defineComponent({
 
   border-radius: 8px;
   border: 1px solid $textGrayOpacity35;
+}
+.bottom-link {
+  position: relative;
 
-  > * {
-    padding: 12px;
+  padding: 12px;
 
-    display: flex;
+  display: flex;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    &:hover svg > use {
+  &:hover {
+    svg > use {
       fill: $primaryOpacity90;
     }
+    .bottom-drawer {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
 
-    svg > use {
-      transition: fill .3s ease;
+  svg > use {
+    transition: fill .3s ease;
+  }
+}
+.bottom-drawer {
+  position: absolute;
+  left: calc(100% - 4px);
+  bottom: -1px;
+  z-index: 101;
+
+  border-radius: 8px;
+  border-bottom-left-radius: initial;
+  border-top-left-radius: initial;
+  border: 1px solid $textGrayOpacity35;
+  border-left: initial;
+  background-color: $backgroundGrayDark3;
+  opacity: 0;
+  visibility: hidden;
+
+  > li {
+    padding: 12px;
+    height: 44px;
+    width: 100px;
+
+    transition: color .3s ease;
+
+    &:hover {
+      color: $primaryOpacity90;
     }
   }
 }
