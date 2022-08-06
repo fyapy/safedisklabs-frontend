@@ -28,6 +28,7 @@ export type IconName =
   | 'link'
   | 'lock'
   | 'copy'
+  | 'arrow-right'
 
 export const props = {
   name: {

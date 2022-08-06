@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { FType } from 'ducks/disk'
 import { computed } from 'vue'
 import { List } from './components'
 
@@ -12,7 +11,6 @@ const props = defineProps<{
   top: number
   left: number
   shared: boolean
-  type: FType
 }>()
 
 const style = computed(() => `top: ${props.top}px; left: ${props.left}px;`)
@@ -22,7 +20,6 @@ const style = computed(() => `top: ${props.top}px; left: ${props.left}px;`)
   <div :class="$style.wrapper" :style="style">
     <List
       :id="id"
-      :type="type"
       :shared="shared"
       @close="emit('close')"
     />

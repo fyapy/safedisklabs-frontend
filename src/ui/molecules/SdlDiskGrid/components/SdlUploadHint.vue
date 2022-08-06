@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useDiskStore } from 'ducks/disk/store.js'
+import { useDiskStore } from 'ducks/disk/store'
 import { SdlIcon, SdlButton } from 'ui/atoms'
 import { color } from 'ui/theme'
+import { useParams } from 'utils/selectors'
 
+const params = useParams<{ id?: string }>()
 const diskStore = useDiskStore()
 
 const isLoading = computed(() => diskStore.inPendingList('upload'))
@@ -15,7 +17,7 @@ function handleChange(e: Event) {
     return
   }
 
-  diskStore.upload(files)
+  diskStore.upload(files, params.value.id)
 }
 </script>
 

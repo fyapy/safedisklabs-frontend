@@ -167,7 +167,12 @@ export default createClient({
 export const createSearch = (
   data: Record<string, string | number | null | boolean | undefined> | LocationQuery,
 ) => {
-  const params = Object.entries(data).filter(([, value]) => typeof value !== 'undefined'
+  const entries = Object.entries(data)
+  if (entries.length === 0) {
+    return ''
+  }
+
+  const params = entries.filter(([, value]) => typeof value !== 'undefined'
     && value !== null
     && value !== false)
     .map(([key, value]) => ([key, `${value}`]))

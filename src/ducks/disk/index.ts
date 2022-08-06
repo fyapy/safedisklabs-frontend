@@ -1,8 +1,7 @@
 export { useDiskStore } from './store'
-export { getLink } from './fn'
+export { shareLink } from './fn'
 export type {
   Disk,
   File,
-  Folder,
-  FType,
+  FileType,
 } from './types'

@@ -5,6 +5,7 @@ import Dashboard from 'modules/Dashboard.vue'
 import { guestGuard, authGuard } from 'utils/guards'
 
 export type FilesListType = 'dashboard' | 'starred' | 'hidden' | 'bin'
+const fileTypes = 'dashboard|hidden|starred|bin'
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -20,7 +21,12 @@ export const router = createRouter({
       beforeEnter: guestGuard,
     },
     {
-      path: '/:type(dashboard|hidden|starred|bin)',
+      path: `/:type(${fileTypes})`,
+      component: Dashboard,
+      beforeEnter: authGuard,
+    },
+    {
+      path: `/:type(${fileTypes})/:fileType(file|folder)/:id`,
       component: Dashboard,
       beforeEnter: authGuard,
     },

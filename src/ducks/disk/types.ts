@@ -7,32 +7,26 @@ export interface Disk {
   createdAt: string
 }
 
-export interface Folder {
-  id: string
-  name: string
-  userId: number
-  diskId: string
-  folderId: string | null
-  hidden: boolean
-  shared: boolean
-  starred: boolean
-  updatedAt: string
-  createdAt: string
-}
+export type FileType = 'file' | 'folder'
 export interface File {
   id: string
   name: string
-  size: string
-  exp: string | null
-  mime: string | null
+  type: FileType
   userId: number
   diskId: string
   folderId: string | null
   hidden: boolean
   shared: boolean
+  bin: boolean
   starred: boolean
+  meta?: Meta
   updatedAt: string
   createdAt: string
 }
-
-export type FType = 'file' | 'folder'
+export interface Meta {
+  id: string
+  fileId: string
+  size: number
+  ext: string | null
+  mime: string | null
+}

@@ -98,7 +98,7 @@ export const toFormData = <T extends object>(data: T, log = false) => {
   return formData
 }
 
-export function mimeTypeToIcon(mime: string | null): IconName | null {
+export const mimeTypeToIcon = (mime?: string | null): IconName | null => {
   if (!mime) return null
 
   switch (mime) {

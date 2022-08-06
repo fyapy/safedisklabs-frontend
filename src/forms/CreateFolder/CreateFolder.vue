@@ -4,10 +4,12 @@ import { computed } from 'vue'
 import { useDiskStore } from 'ducks/disk'
 import { SdlButton } from 'ui/atoms'
 import { SdlFieldText } from 'ui/molecules'
+import { useParams } from 'utils/selectors'
 import { required } from 'utils/validate'
 import i18n from 'i18n'
 import { CreateFolderValues } from './types'
 
+const params = useParams<{ id: string }>()
 const diskStore = useDiskStore()
 
 const emits = defineEmits<{
@@ -28,7 +30,7 @@ const { handleSubmit, isSubmitting, errors } = useForm<CreateFolderValues>({
 const isDisabled = computed(() => isSubmitting.value || isInvalid(errors, ['name']))
 
 const handleFormSubmit = handleSubmit(async values => {
-  await diskStore.createFolder(values.name)
+  await diskStore.createFolder(values.name, params.value.id)
   emits('submit')
 })
 </script>

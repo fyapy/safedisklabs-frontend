@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { useDiskStore, File } from 'ducks/disk'
+import { useDiskStore } from 'ducks/disk'
 import { SdlIcon } from 'ui/atoms'
 import { color } from 'ui/theme'
 import { useQuery } from 'utils/selectors'
@@ -21,9 +21,8 @@ watch(() => query.value.id, id => id && diskStore.fetchPreview(id), {
   <div :class="$style.spacer" :data-closed="isClosed">
     <div :class="$style.wrapper">
       <SdlFilePreview
-        v-if="!isClosed && diskStore.previewType === 'file'"
-        :type="diskStore.previewType"
-        :file="(diskStore.preview as File)!"
+        v-if="!isClosed && !!diskStore.preview"
+        :file="diskStore.preview!"
       />
       <SdlEmptyPreview v-else-if="!isClosed" />
     </div>

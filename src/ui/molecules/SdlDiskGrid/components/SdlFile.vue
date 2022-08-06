@@ -18,7 +18,10 @@ const diskStore = useDiskStore()
 
 const { wrapperRef, handleContextMenu, dropdownState, handleClose } = useEditDropdown()
 
-const fileIcon = computed(() => mimeTypeToIcon(props.file.mime))
+const fileIcon = computed(() => mimeTypeToIcon(props.file.meta?.mime))
+const size = computed(() => props.file.meta
+  ? `${bytesToMB(+props.file.meta!.size).toFixed(3)} MB`
+  : null)
 
 const handleClick = () => {
   const route = router.currentRoute.value
@@ -32,6 +35,8 @@ const handleClick = () => {
 
   router.replace(`${route.path}${createSearch(query)}`)
 }
+
+const toggleStarred = () => diskStore.toggleStarred(props.file.id)
 </script>
 
 <template>
@@ -72,7 +77,7 @@ const handleClick = () => {
       <div :class="$style.data">
         <div class="flow-column">
           <div>Filesize:</div>
-          <div :class="$style.filesize">{{ bytesToMB(+file.size).toFixed(3) }} MB</div>
+          <div :class="$style.filesize">{{ size }}</div>
         </div>
 
         <div :class="style.icons">
@@ -88,7 +93,7 @@ const handleClick = () => {
 
       <div
         :class="[style.star, file.starred && style.star__marked]"
-        @click="diskStore.toggleStarred(file.id, 'file')"
+        @click.stop="toggleStarred"
       >
         <SdlIcon
           :name="file.starred ? 'star-solid' : 'star'"

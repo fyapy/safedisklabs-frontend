@@ -3,13 +3,15 @@ import { computed } from 'vue'
 import { useDiskStore } from 'ducks/disk'
 import { SdlIcon } from 'ui/atoms'
 import { color } from 'ui/theme'
-import { DropdownStatus } from '../types.js'
+import { useParams } from 'utils/selectors'
+import { DropdownStatus } from '../types'
 
 const emits = defineEmits<{
   (e: 'status', status: DropdownStatus): void
   (e: 'close'): void
 }>()
 
+const params = useParams<{ id?: string }>()
 const diskStore = useDiskStore()
 
 const isLoading = computed(() => diskStore.inPendingList('upload'))
@@ -18,7 +20,7 @@ function handleChange(e: Event) {
   const files = (e.target as HTMLInputElement).files
 
   emits('close')
-  diskStore.upload(files)
+  diskStore.upload(files, params.value.id)
 }
 </script>
 

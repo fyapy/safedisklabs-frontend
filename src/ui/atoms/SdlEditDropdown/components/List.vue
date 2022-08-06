@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { FType, useDiskStore } from 'ducks/disk'
+import { useDiskStore } from 'ducks/disk'
 import { SdlIcon } from 'ui/atoms'
 import { color } from 'ui/theme'
 
 const props = defineProps<{
   id: string
   shared: boolean
-  type: FType
 }>()
 const emit = defineEmits<{
   (e: 'close'): void
@@ -14,13 +13,13 @@ const emit = defineEmits<{
 
 const diskStore = useDiskStore()
 
-const toggleHidden = () => diskStore.toggleHidden(props.id, props.type)
-const moveToBinOrRemove = () => diskStore.moveToBinOrRemove(props.id, props.type)
-const toggleShared = () => diskStore.toggleShared(props.id, props.type)
+const toggleHidden = () => diskStore.toggleHidden(props.id)
+const moveToBinOrRemove = () => diskStore.moveToBinOrRemove(props.id)
+const toggleShared = () => diskStore.toggleShared(props.id)
 
 const handleCopyLink = () => {
   emit('close')
-  diskStore.copyLink(props.id, props.type)
+  diskStore.copyLink(props.id)
 }
 </script>
 

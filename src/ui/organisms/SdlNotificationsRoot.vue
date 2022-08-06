@@ -37,7 +37,7 @@ export default defineComponent({
 .wrapper {
   position: fixed;
   right: 55px;
-  bottom: 56px;
+  top: 56px;
   z-index: 80;
 }
 </style>

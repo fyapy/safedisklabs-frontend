@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { FilesListType } from 'routes'
 import { useAuthStore } from 'ducks/auth'
 import { SdlLogo, SdlIcon } from 'ui/atoms'
 import { color } from 'ui/theme'
+import { useParams } from 'utils/selectors'
 import { DiskStorage } from './components'
 
+const params = useParams<{ type?: FilesListType }>()
 const authStore = useAuthStore()
 
 const links = [
@@ -41,8 +44,7 @@ const links = [
             v-for="{ to, icon, text } in links"
             :key="to"
             :to="to"
-            :class="$style.link"
-            exact-active-class="active"
+            :class="[$style.link, params.type === to.replace('/', '') && 'active']"
           >
             <sdl-icon
               :name="icon"

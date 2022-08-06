@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { Breadcrumb } from 'ui/atoms/SdlBreadcrumbs'
 import { FilesListType } from 'routes'
 import { computed, ref } from 'vue'
 import { useDiskStore } from 'ducks/disk'
-import { SdlAddDropdown } from 'ui/atoms'
+import { SdlAddDropdown, SdlBreadcrumbs } from 'ui/atoms'
 import { useParams } from 'utils/selectors'
 import { ContextMenus, useListener } from 'composes'
 import { SdlFile, SdlUploadHint, SdlFolder } from './components'
@@ -16,7 +17,6 @@ const dropdownRef = ref<{
   reset(): void
 }>()
 
-const foldersList = computed(() => diskStore.foldersList)
 const files = computed(() => diskStore.allList)
 
 function handleAddDropdown(e: MouseEvent) {
@@ -52,29 +52,38 @@ const titles: Record<FilesListType, string> = {
   hidden: 'Hidden files',
   starred: 'Starred files',
 }
+
+const breadcrumbsList = computed((): Breadcrumb[] => (diskStore.paths.length
+  ? [
+    {
+      to: `/${params.value.type}`,
+      text: 'My Disk',
+    },
+    ...diskStore.paths.map(({ id, name }) => ({
+      to: `/${params.value.type}/folder/${id}`,
+      text: name,
+    })),
+  ]
+  : []))
 </script>
 
 <template>
   <div class="flex-1" @contextmenu.prevent="handleAddDropdown">
     <div :class="$style.header">
       <div>{{ titles[params.type] }}</div>
+
+      <SdlBreadcrumbs :list="breadcrumbsList" :class="$style.breadcrumbs" />
     </div>
 
-    <div v-if="!files.length && !foldersList.length" :class="$style.grid">
+    <div v-if="!files.length" :class="$style.grid">
       <SdlUploadHint />
     </div>
 
     <div v-else :class="$style.grid">
-      <SdlFolder
-        v-for="folder in foldersList"
-        :key="`folder-${folder.id}`"
-        :folder="folder"
-      />
-      <SdlFile
-        v-for="file in files"
-        :key="file.id"
-        :file="file"
-      />
+      <div v-for="file in files" :key="file.id">
+        <SdlFolder v-if="file.type === 'folder'" :file="file" />
+        <SdlFile v-else :file="file" />
+      </div>
     </div>
   </div>
 
@@ -85,8 +94,13 @@ const titles: Record<FilesListType, string> = {
 .header {
   margin-bottom: 40px;
 
+  display: flex;
+
   font-size: 28px;
   font-weight: 600;
+}
+.breadcrumbs {
+  margin-left: 28px;
 }
 .grid {
   margin-bottom: 40px;

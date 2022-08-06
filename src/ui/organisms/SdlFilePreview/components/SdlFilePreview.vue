@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { File, getLink, useDiskStore } from 'ducks/disk'
+import { File, shareLink, useDiskStore } from 'ducks/disk'
 import { SdlIcon } from 'ui/atoms'
 import { color } from 'ui/theme'
 import { mimeTypeToIcon } from 'utils/selectors'
@@ -12,7 +12,12 @@ const props = defineProps<{
   file: File
 }>()
 
-const fileIcon = computed(() => mimeTypeToIcon(props.file.mime))
+const fileIcon = computed(() => mimeTypeToIcon(props.file.meta?.mime))
+
+const toggleHidden = () => diskStore.toggleHidden(props.file.id)
+const toggleShared = () => diskStore.toggleShared(props.file.id)
+const moveToBinOrRemove = () => diskStore.moveToBinOrRemove(props.file.id)
+const copyLink = () => diskStore.copyLink(props.file.id)
 </script>
 
 <template>
@@ -28,7 +33,16 @@ const fileIcon = computed(() => mimeTypeToIcon(props.file.mime))
     </div>
 
     <div class="justify-center">
-      <div :class="$style.content">
+      <div v-if="file.type === 'folder'" :class="$style.content">
+        <SdlIcon
+          name="folder"
+          width="170"
+          height="170"
+          :fill="color.gray2"
+        />
+      </div>
+
+      <div v-else :class="$style.content">
         <SdlIcon
           name="blank-file"
           width="170"
@@ -63,14 +77,14 @@ const fileIcon = computed(() => mimeTypeToIcon(props.file.mime))
           :fill="color.primary2Opacity80"
         />
 
-        <div :class="$style.shared__link">{{ getLink(file.id, 'file') }}</div>
+        <div :class="$style.shared__link">{{ shareLink(file.id, file.type) }}</div>
 
         <SdlIcon
           name="copy"
           width="19"
           height="19"
           :fill="color.gray2"
-          @click="diskStore.copyLink(file.id, 'file')"
+          @click="copyLink"
         />
       </div>
     </div>
@@ -80,19 +94,19 @@ const fileIcon = computed(() => mimeTypeToIcon(props.file.mime))
     <div :class="style.line"></div>
 
     <div :class="$style.btns">
-      <div @click="diskStore.toggleShared(file.id, 'file')">
+      <div @click="toggleShared">
         <div :class="$style.btn">
           <SdlIcon
-            name="share"
+            :name="file.shared ? 'lock' : 'share'"
             width="24"
             height="24"
             :fill="color.white"
           />
         </div>
-        <div :class="$style.btn__text">Share</div>
+        <div :class="$style.btn__text">{{ file.shared ? 'Unshare' : 'Share' }}</div>
       </div>
 
-      <div @click="diskStore.toggleHidden(file.id, 'file')">
+      <div @click="toggleHidden">
         <div :class="$style.btn">
           <SdlIcon
             name="closed-eye"
@@ -104,7 +118,7 @@ const fileIcon = computed(() => mimeTypeToIcon(props.file.mime))
         <div :class="$style.btn__text">Hide</div>
       </div>
 
-      <div @click="diskStore.moveToBinOrRemove(file.id, 'file')">
+      <div @click="moveToBinOrRemove">
         <div :class="$style.btn">
           <SdlIcon
             name="bin"
@@ -199,12 +213,14 @@ const fileIcon = computed(() => mimeTypeToIcon(props.file.mime))
 
   border-radius: 10px;
   border: 1px solid rgba(107, 107, 111, .4);
+  user-select: none;
   cursor: pointer;
 }
 .btn__text {
   padding: 12px 0 4px;
 
   text-align: center;
+  user-select: none;
   cursor: pointer;
 }
 .btns {

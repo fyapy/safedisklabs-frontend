@@ -1,9 +1,4 @@
-import type { FType } from './types'
+import type { FileType } from './types'
 
-export const getLink = (id: string, type: FType, full = true) => {
-  const url = `/${type}/${id}`
-
-  return full
-    ? `${`${window.location.protocol}//${window.location.host}`}${url}`
-    : url
-}
+export const shareLink = (id: string, type: FileType) =>
+  `${`${window.location.protocol}//${window.location.host}`}/${type}/${id}`
