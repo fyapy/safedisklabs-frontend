@@ -18,6 +18,16 @@ export type IconName =
   | 'upload-folder'
   | 'folder'
   | 'double-arrow-right'
+  | 'dots'
+  | 'blank-file'
+  | 'image'
+  | 'zip'
+  | 'json'
+  | 'typescript'
+  | 'share'
+  | 'link'
+  | 'lock'
+  | 'copy'
 
 export const props = {
   name: {

@@ -15,9 +15,12 @@ const style = computed(() => {
   }
 
   const _disk = disk.value
-  const percent = _disk.maxSize / 100
+  const percent = +_disk.maxSize / 100
+  const size = (+_disk.usedSize / percent)
 
-  return `transform: scaleX(.${_disk.usedSize / percent});`
+  return `transform: scaleX(${size < 1
+    ? (size / 100).toFixed(3)
+    : size.toFixed(2)});`
 })
 const size = computed(() => {
   if (diskStore.isEmptyDisk || diskStore.pending) {
@@ -25,8 +28,10 @@ const size = computed(() => {
   }
 
   const _disk = disk.value
+  const used = bytesToGB(+_disk.usedSize).replace('.00', '')
+  const total = bytesToGB(+_disk.maxSize).replace('.00', '')
 
-  return `${bytesToGB(_disk.usedSize).replace('.00', '')} / ${bytesToGB(_disk.maxSize).replace('.00', '')} GB`
+  return `${used} / ${total} GB`
 })
 </script>
 

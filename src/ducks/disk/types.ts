@@ -1,8 +1,8 @@
 export interface Disk {
   id: string
   userId: number
-  maxSize: number
-  usedSize: number
+  maxSize: string
+  usedSize: string
   updatedAt: string
   createdAt: string
 }
@@ -22,7 +22,7 @@ export interface Folder {
 export interface File {
   id: string
   name: string
-  size: number
+  size: string
   exp: string | null
   mime: string | null
   userId: number
@@ -34,3 +34,5 @@ export interface File {
   updatedAt: string
   createdAt: string
 }
+
+export type FType = 'file' | 'folder'

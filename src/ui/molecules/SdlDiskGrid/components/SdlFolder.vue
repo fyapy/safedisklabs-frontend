@@ -1,22 +1,57 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { Folder, useDiskStore } from 'ducks/disk'
-import { SdlIcon } from 'ui/atoms'
+import { SdlIcon, SdlEditDropdown } from 'ui/atoms'
 import { color } from 'ui/theme'
-
-const diskStore = useDiskStore()
+import { createSearch } from 'utils/http'
+import { useEditDropdown } from 'composes'
+import style from './SdlFile.module.scss'
 
 const props = defineProps<{
   folder: Folder
 }>()
 
-const toggleStarred = () => diskStore.toggleStarred(props.folder.id, 'folder')
+const router = useRouter()
+const diskStore = useDiskStore()
+
+const { wrapperRef, handleContextMenu, dropdownState, handleClose } = useEditDropdown()
+
+const handleClick = () => {
+  const route = router.currentRoute.value
+  const query = { ...route.query }
+
+  if (query.id === props.folder.id) {
+    delete query.id
+  } else {
+    query.id = props.folder.id
+  }
+
+  router.replace(`${route.path}${createSearch(query)}`)
+}
 </script>
 
 <template>
-  <div :class="$style.wrapper">
+  <div
+    ref="wrapperRef"
+    :class="style.wrapper"
+    @click="handleClick"
+    @contextmenu.stop.prevent="handleContextMenu"
+  >
+    <div :class="style.content">
+      <SdlIcon
+        name="folder"
+        width="140"
+        height="140"
+        :fill="color.gray2"
+      />
+      <div :class="style.name">
+        {{ folder.name }}
+      </div>
+    </div>
+
     <div
-      :class="[$style.star, folder.starred && $style.starred]"
-      @click="toggleStarred"
+      :class="[style.star, folder.starred && style.star__marked]"
+      @click="diskStore.toggleStarred(folder.id, 'folder')"
     >
       <SdlIcon
         :name="folder.starred ? 'star-solid' : 'star'"
@@ -26,71 +61,17 @@ const toggleStarred = () => diskStore.toggleStarred(props.folder.id, 'folder')
       />
     </div>
 
-    <div :class="$style.content">
-      <SdlIcon
-        name="folder"
-        width="140"
-        height="140"
-        :fill="color.gray2"
-      />
-      <div :class="$style.name">
-        {{ folder.name }}
-      </div>
-    </div>
+    <SdlEditDropdown
+      v-if="dropdownState.visible"
+      :id="folder.id"
+      :shared="folder.shared"
+      :top="dropdownState.top"
+      :left="dropdownState.left"
+      type="folder"
+      @close="handleClose"
+    />
   </div>
 </template>
 
 <style module lang="scss">
-.wrapper {
-  position: relative;
-
-  padding-top: 100%;
-
-  background-color: $backgroundGrayDark;
-  border: 1px solid $backgroundGrayDark;
-  border-radius: 16px;
-  user-select: none;
-  transition:
-    border-color .3s ease,
-    background-color .3s ease;
-
-  &:hover {
-    border-color: $grayLight2;
-    background-color: $grayLight;
-  }
-}
-.content {
-  position: absolute;
-  inset: 0;
-
-  padding: 24px;
-
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-
-  > svg {
-    margin-bottom: 18px;
-  }
-}
-.name {
-  font-size: 20px;
-}
-.star {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  z-index: 1;
-
-  padding: 10px;
-
-  display: flex;
-
-  cursor: pointer;
-  user-select: none;
-}
-.starred {
-  filter: drop-shadow(0px 4px 16px rgba(3, 195, 73, .45));
-}
 </style>

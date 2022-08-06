@@ -1,3 +1,4 @@
+import { LocationQuery } from 'vue-router'
 import { getAccessToken } from './selectors'
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
@@ -163,7 +164,9 @@ export default createClient({
   },
 })
 
-export const createSearch = (data: Record<string, string | number | null | boolean | undefined>) => {
+export const createSearch = (
+  data: Record<string, string | number | null | boolean | undefined> | LocationQuery,
+) => {
   const params = Object.entries(data).filter(([, value]) => typeof value !== 'undefined'
     && value !== null
     && value !== false)

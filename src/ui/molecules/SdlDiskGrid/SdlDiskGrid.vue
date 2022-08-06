@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { FilesListType } from 'routes'
 import { computed, ref } from 'vue'
 import { useDiskStore } from 'ducks/disk'
 import { SdlAddDropdown } from 'ui/atoms'
-import { useListener } from 'composes'
+import { useParams } from 'utils/selectors'
+import { ContextMenus, useListener } from 'composes'
 import { SdlFile, SdlUploadHint, SdlFolder } from './components'
 
+const params = useParams<{ type: FilesListType }>()
 const diskStore = useDiskStore()
 
 const dropdownStyle = ref<string>('')
@@ -17,7 +20,8 @@ const foldersList = computed(() => diskStore.foldersList)
 const files = computed(() => diskStore.allList)
 
 function handleAddDropdown(e: MouseEvent) {
-  e.preventDefault()
+  ContextMenus.unsubscribeAll()
+
   const _wrapper = dropdownRef.value?.wrapperRef
 
   if (_wrapper) {
@@ -27,6 +31,8 @@ function handleAddDropdown(e: MouseEvent) {
       : e.pageY
 
     dropdownStyle.value = `top: ${top}px; left: ${e.pageX}px;`
+
+    ContextMenus.subscribe(closeAddDropdown)
   }
 }
 
@@ -38,17 +44,20 @@ function handleMissClick(e: MouseEvent) {
   }
 }
 
-useListener({
-  target: document,
-  event: 'click',
-  handler: handleMissClick,
-})
+useListener('click', document, handleMissClick)
+
+const titles: Record<FilesListType, string> = {
+  dashboard: 'My Disk',
+  bin: 'Bin',
+  hidden: 'Hidden files',
+  starred: 'Starred files',
+}
 </script>
 
 <template>
-  <div class="flex-1" @contextmenu="handleAddDropdown">
+  <div class="flex-1" @contextmenu.prevent="handleAddDropdown">
     <div :class="$style.header">
-      <div>My Disk</div>
+      <div>{{ titles[params.type] }}</div>
     </div>
 
     <div v-if="!files.length && !foldersList.length" :class="$style.grid">

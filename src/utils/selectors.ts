@@ -1,3 +1,7 @@
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { IconName } from 'ui/atoms/SdlIcon'
+
 /* eslint-disable max-len */
 export function CookieGetItem(key: string) {
   const value = decodeURIComponent(
@@ -92,4 +96,32 @@ export const toFormData = <T extends object>(data: T, log = false) => {
   }
 
   return formData
+}
+
+export function mimeTypeToIcon(mime: string | null): IconName | null {
+  if (!mime) return null
+
+  switch (mime) {
+    case 'image/svg+xml':
+      return 'image'
+    case 'application/zip':
+      return 'zip'
+    case 'application/json':
+      return 'json'
+    case 'application/octet-stream':
+      return 'typescript'
+    default:
+      return null
+  }
+}
+
+export const useParams = <T extends Record<string, string | number>>() => {
+  const route = useRoute()
+
+  return computed(() => route.params as T)
+}
+export const useQuery = <T extends Record<string, string | number>>() => {
+  const route = useRoute()
+
+  return computed(() => route.query as T)
 }

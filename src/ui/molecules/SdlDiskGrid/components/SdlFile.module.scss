@@ -1,0 +1,65 @@
+.wrapper {
+  position: relative;
+
+  padding-top: 100%;
+
+  background-color: $backgroundGrayDark;
+  border: 1px solid $backgroundGrayDark;
+  border-radius: 16px;
+  user-select: none;
+  transition:
+    border-color .3s ease,
+    background-color .3s ease;
+
+  &:hover {
+    border-color: $grayLight2;
+    background-color: $grayLight;
+  }
+}
+.name {
+  max-height: 46.8px;
+  max-width: 100%;
+
+  font-size: 18px;
+  overflow-wrap: anywhere;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.star {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+
+  padding: 10px;
+
+  display: flex;
+
+  cursor: pointer;
+  user-select: none;
+
+  &__marked {
+    filter: drop-shadow(0px 4px 16px rgba(3, 195, 73, .45));
+  }
+
+  @include makeMedia(null, 1440px) {
+    top: 8px;
+    left: 8px;
+  }
+}
+.content {
+  position: absolute;
+  inset: 0;
+
+  padding: 24px;
+
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+}
+.icons {
+  display: flex;
+  align-items: center;
+}

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { SdlIcon } from 'ui/atoms'
 import { color } from 'ui/theme'
-import style from '../SdlFilePreview.module.scss'
+import style from './SdlPreview.module.scss'
 </script>
 
 <template>

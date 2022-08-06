@@ -1,14 +1,21 @@
-import { onBeforeUnmount, onMounted, Ref } from 'vue'
+import {
+  onBeforeUnmount,
+  onMounted,
+  Ref,
+  isRef,
+} from 'vue'
 
-const getTarget = (el: Ref<HTMLDivElement | undefined> | Document) => el instanceof Document
-  ? el
-  : el.value
+type Target = Ref<HTMLDivElement | undefined> | Document | Window
 
-export function useListener({ event, target, handler }: {
-  event: string
-  target: Ref<HTMLDivElement | undefined> | Document
-  handler(e: Event): void
-}) {
+const getTarget = (el: Target) => isRef(el)
+  ? el.value
+  : el
+
+export function useListener(
+  event: string,
+  target: Target,
+  handler: any,
+) {
   onMounted(() => getTarget(target)?.addEventListener(event, handler))
   onBeforeUnmount(() => getTarget(target)?.removeEventListener(event, handler))
 }

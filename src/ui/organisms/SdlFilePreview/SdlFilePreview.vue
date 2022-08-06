@@ -1,25 +1,38 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { useDiskStore, File } from 'ducks/disk'
 import { SdlIcon } from 'ui/atoms'
 import { color } from 'ui/theme'
-import { SdlEmptyPreview } from './components'
+import { useQuery } from 'utils/selectors'
+import { SdlEmptyPreview, SdlFilePreview } from './components'
 
+const query = useQuery<{ id?: string }>()
+const diskStore = useDiskStore()
 const isClosed = ref(false)
 
 const toggleClosed = () => isClosed.value = !isClosed.value
+
+watch(() => query.value.id, id => id && diskStore.fetchPreview(id), {
+  immediate: true,
+})
 </script>
 
 <template>
   <div :class="$style.spacer" :data-closed="isClosed">
     <div :class="$style.wrapper">
-      <SdlEmptyPreview v-if="!isClosed" />
+      <SdlFilePreview
+        v-if="!isClosed && diskStore.previewType === 'file'"
+        :type="diskStore.previewType"
+        :file="(diskStore.preview as File)!"
+      />
+      <SdlEmptyPreview v-else-if="!isClosed" />
     </div>
 
     <div :class="$style['toggle-box']" @click="toggleClosed">
       <SdlIcon
         name="double-arrow-right"
-        width="24"
-        height="24"
+        width="16"
+        height="16"
         :fill="color.primary2"
       />
     </div>
@@ -38,7 +51,7 @@ const toggleClosed = () => isClosed.value = !isClosed.value
       padding: 0;
     }
     .toggle-box {
-      right: calc(50px - 33px);
+      right: calc(50px - 22px);
 
       svg {
         transform: rotate(180deg);
@@ -70,12 +83,12 @@ const toggleClosed = () => isClosed.value = !isClosed.value
 }
 .toggle-box {
   position: fixed;
-  bottom: calc(66px - 33px);
-  right: calc(460px - 33px);
+  bottom: calc(66px - 22px);
+  right: calc(460px - 22px);
   z-index: 3;
 
-  width: 66px;
-  height: 66px;
+  width: 44px;
+  height: 44px;
 
   display: flex;
   justify-content: center;
@@ -85,5 +98,9 @@ const toggleClosed = () => isClosed.value = !isClosed.value
   border-radius: 12px;
   background: $backgroundGrayDark3;
   box-shadow: 0px 4px 25px rgba(0, 0, 0, .25);
+
+  @include makeMedia(null, 1600px) {
+    right: calc(400px - 22px);
+  }
 }
 </style>

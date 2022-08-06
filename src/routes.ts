@@ -4,6 +4,8 @@ import Register from 'forms/auth/SdlRegisterForm.vue'
 import Dashboard from 'modules/Dashboard.vue'
 import { guestGuard, authGuard } from 'utils/guards'
 
+export type FilesListType = 'dashboard' | 'starred' | 'hidden' | 'bin'
+
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -18,7 +20,7 @@ export const router = createRouter({
       beforeEnter: guestGuard,
     },
     {
-      path: '/dashboard',
+      path: '/:type(dashboard|hidden|starred|bin)',
       component: Dashboard,
       beforeEnter: authGuard,
     },

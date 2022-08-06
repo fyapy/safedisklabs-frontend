@@ -1,8 +1,12 @@
-import type { Disk, File, Folder } from './types'
+import type {
+  Disk, File, Folder, FType,
+} from './types'
+import type { FilesListType } from 'routes'
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { asyncErrorNotify } from 'ducks/notifications'
-import http from 'utils/http'
+import { asyncErrorNotify, errorNotify, useNotificationsStore } from 'ducks/notifications'
+import http, { createSearch } from 'utils/http'
 import { toFormData } from 'utils/selectors'
+import { getLink } from './fn'
 
 type State = {
   pending: boolean
@@ -10,6 +14,8 @@ type State = {
   data: Disk | null
   foldersList: Folder[]
   allList: File[]
+  preview: File | Folder | null
+  previewType: 'file' | 'folder' | null
 }
 
 export const useDiskStore = defineStore('disk', {
@@ -19,6 +25,8 @@ export const useDiskStore = defineStore('disk', {
     data: null,
     foldersList: [],
     allList: [],
+    preview: null,
+    previewType: null,
   }),
   getters: {
     isEmptyDisk: state => state.data === null,
@@ -28,11 +36,32 @@ export const useDiskStore = defineStore('disk', {
     removePendingList(remove: string) {
       this.pendingList = this.pendingList.filter(item => item !== remove)
     },
-    async fetchDiskFiles() {
+    removeItemList(id: string, type: FType) {
+      if (type === 'folder') {
+        this.foldersList = this.foldersList.filter(folder => folder.id !== id)
+      } else {
+        this.allList = this.allList.filter(file => file.id !== id)
+      }
+    },
+    updateItem(id: string, type: FType, key: string, value: any) {
+      if (type === 'folder') {
+        this.foldersList = this.foldersList.map(folder => folder.id === id
+          ? ({ ...folder, [key]: value })
+          : folder)
+      } else {
+        this.allList = this.allList.map(file => file.id === id
+          ? ({ ...file, [key]: value })
+          : file)
+      }
+    },
+    async fetchDiskFiles(type?: FilesListType) {
       this.pending = true
 
       try {
-        const res = await http.get('/disks/list')
+        const search = type === 'dashboard'
+          ? ''
+          : createSearch({ type })
+        const res = await http.get(`/disks/list${search}`)
 
         this.data = res.data
         this.allList = res.list.files
@@ -84,26 +113,77 @@ export const useDiskStore = defineStore('disk', {
         this.removePendingList('create-folder')
       }
     },
-    async toggleStarred(id: string, type: 'folder' | 'file') {
-      const body = {
-        id,
-        type,
-      }
-
+    async toggleStarred(id: string, type: FType) {
       try {
-        const { value } = await http.post('/disks/toggle-starred', body)
+        const { value } = await http.post('/disks/toggle-starred', { id, type })
 
-        if (type === 'folder') {
-          this.foldersList = this.foldersList.map(folder => folder.id === id
-            ? ({ ...folder, starred: value })
-            : folder)
-        } else {
-          this.allList = this.allList.map(file => file.id === id
-            ? ({ ...file, starred: value })
-            : file)
+        this.updateItem(id, type, 'starred', value)
+      } catch (e) {
+        await asyncErrorNotify(e)
+      }
+    },
+    async toggleShared(id: string, type: FType) {
+      try {
+        const { value } = await http.post('/disks/toggle-shared', { id, type })
+
+        this.updateItem(id, type, 'shared', value)
+
+        if (this.preview?.id === id) {
+          this.preview = {
+            ...this.preview,
+            shared: value,
+          }
+        }
+
+        if (value) {
+          return this.copyLink(id, type)
         }
       } catch (e) {
         await asyncErrorNotify(e)
+      }
+    },
+    async copyLink(id: string, type: FType) {
+      try {
+        await navigator.clipboard.writeText(getLink(id, type))
+
+        useNotificationsStore().asyncAdd({
+          type: 'success',
+          text: 'Copied to clipboard',
+        })
+      } catch (error) {
+        errorNotify('Error copying to clipboard')
+      }
+    },
+    async toggleHidden(id: string, type: FType) {
+      try {
+        await http.post('/disks/toggle-hidden', { id, type })
+
+        this.removeItemList(id, type)
+      } catch (e) {
+        await asyncErrorNotify(e)
+      }
+    },
+    async moveToBinOrRemove(id: string, type: FType) {
+      try {
+        await http.post('/disks/move-to-bin', { id, type })
+
+        this.removeItemList(id, type)
+      } catch (e) {
+        await asyncErrorNotify(e)
+      }
+    },
+    async fetchPreview(id: string) {
+      this.pendingList.push('preview')
+
+      try {
+        const { data, type } = await http.get(`/disks/details/${id}`)
+
+        this.preview = data
+        this.previewType = type
+      } catch (e) {
+        await asyncErrorNotify(e)
+      } finally {
+        this.removePendingList('preview')
       }
     },
   },
